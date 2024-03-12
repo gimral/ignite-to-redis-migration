@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- Ignite configuration -->
+    <bean id="ignite.cfg" class="org.apache.ignite.configuration.IgniteConfiguration">
+        <!-- Set the name of the Ignite instance -->
+        <property name="igniteInstanceName" value="ignite-instance" />
+
+        <!-- Enable peer class loading -->
+        <property name="peerClassLoadingEnabled" value="true" />
+
+        <!-- Configure Ignite discovery SPI -->
+        <property name="discoverySpi">
+            <bean class="org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi">
+                <property name="ipFinder">
+                    <!-- Use multicast IP finder for discovering nodes in the same network segment -->
+                    <bean
+                        class="org.apache.ignite.spi.discovery.tcp.ipfinder.vm.TcpDiscoveryVmIpFinder">
+                        <!-- Define IP addresses of Ignite nodes for initial discovery -->
+                        <property name="addresses">
+                            <list>
+                                <value>127.0.0.1:47500..47509</value>
+                            </list>
+                        </property>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+
+        <!-- Configure Ignite communication SPI -->
+        <property name="communicationSpi">
+            <bean class="org.apache.ignite.spi.communication.tcp.TcpCommunicationSpi">
+                <!-- Set the number of threads in the thread pool -->
+                <property name="localPort" value="48100" />
+            </bean>
+        </property>
+
+        <!-- Configure Ignite caching -->
+        <property name="cacheConfiguration">
+            <list>
+                <!-- Configure a sample cache named "exampleCache" -->
+                <bean class="org.apache.ignite.configuration.CacheConfiguration">
+                    <property name="name" value="exampleCache" />
+                    <property name="atomicityMode" value="ATOMIC" />
+                    <property name="backups" value="1" />
+                </bean>
+            </list>
+        </property>
+    </bean>
+</beans>

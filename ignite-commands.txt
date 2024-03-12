@@ -1,0 +1,3 @@
+./sqlline.sh -u jdbc:ignite:thin://127.0.0.1/
+
+SELECT TABLE_NAME FROM SYS.TABLES WHERE SCHEMA_NAME = 'PUBLIC';

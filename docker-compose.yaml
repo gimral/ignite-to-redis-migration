@@ -1,0 +1,26 @@
+version: "3"
+services:
+  ignite:
+    image: apacheignite/ignite
+    container_name: ignite
+    environment:
+      - IGNITE_QUIET=true
+    ports:
+      - "10800:10800"
+      - "11211:11211" # Ignite REST port
+      - "47100:47100" # Ignite communication SPI port
+      - "47500:47500" # Ignite discovery SPI port
+      - "49112:49112" # Ignite JMX port
+    volumes:
+      - ./config/ignite-config.xml:/opt/ignite/apache-ignite/config/default-config.xml
+      - ./config/ignite-init.sh:/opt/ignite/init.sh
+    command: /bin/bash -c "/opt/ignite/apache-ignite/bin/ignite.sh /opt/ignite/apache-ignite/config/default-config.xml && /opt/ignite/init.sh"
+
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - "6379:6379"
+    # volumes:
+    #   - ./redis_data:/data
+    # restart: always
